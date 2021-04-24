@@ -8,10 +8,17 @@
 /* function prototype */
 static void dataSource_cbf(uint32_t* data);
 
-/* initializer function that is called once the RTOS is started */
-void user2_initialize_rtos(void)
+/* subscribe to data source notification */
+void user2_force_subscribe(void)
 {
+    std::cout << "user2: subscribing\n\r";
     dataSource_subscribe(dataSource_cbf);
+}
+
+void user2_force_unsubscribe(void)
+{
+    std::cout << "user2: unsubscribing\n\r";
+    dataSource_unsubscribe(dataSource_cbf);
 }
 
 /* function that gets called when the data source sends data.
@@ -23,5 +30,5 @@ static void dataSource_cbf(uint32_t* data)
 {
     unsigned int myData = *(unsigned int*)data;
     /* in our example, we'll just print. */
-    std::cout << "data sent to user 2: " << myData << "\n\r";
+    std::cout << "user2: data sent: " << myData << "\n\r";
 }

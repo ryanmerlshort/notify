@@ -1,3 +1,6 @@
 
 
-void user2_initialize_rtos(void);
+void user2_force_subscribe(void);
+
+void user2_force_unsubscribe(void);
+

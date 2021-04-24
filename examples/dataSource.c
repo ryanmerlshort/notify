@@ -1,6 +1,8 @@
 #include "dataSource.h"
 #include "../notify.h"
 #include <stdint.h>
+#include <iostream>
+
 
 notify_subscriberList dataSourceSubscribers;
 
@@ -16,9 +18,16 @@ bool dataSource_subscribe(void(*cbf)(uint32_t*))
     return notify_addSubscriptionToList(&dataSourceSubscribers, (notify_cb)cbf);
 }
 
+/* called when the subscriber wants to unregister for notifications */
+bool dataSource_unsubscribe(void(*cbf)(uint32_t*))
+{
+    return notify_removeSubscriptionFromList(&dataSourceSubscribers, (notify_cb)cbf);
+}
+
 /* when the data comes in, notify the subscribers */
 void dataSource_feedData(uint32_t newData)
 {
+    std::cout << "dataSource: "<< (unsigned int)newData << " sent to data source\n\r";
     notify_notifySubscribers(&dataSourceSubscribers, (void*)&newData);
 }
 

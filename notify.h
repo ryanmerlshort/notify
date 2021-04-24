@@ -1,13 +1,10 @@
 /****************************************************************************
- * SUB-NOTIFY
+ * NOTIFY
  * 
  * lightweight subscription-notification wrapper for users to subscribe to a 
  * data source's notification. 
  * 
  * supports multiple subscriptions by multiple users to a single notification
- * 
- * subscriber owns subscription object and passes it to notifier. notifier 
- * owns the subscriber list.
  * 
  * the subscriber's callback function is called directly from the notifier's
  * thread, so make sure that the subscriber does not block or perform any 
@@ -35,10 +32,10 @@ extern "C" {
 /****************************************************************************
  OBJECTS
  ****************************************************************************/
-/* note: these objects are intended to be globals variable local to the 
- * subscriber/notifier, defined at compile time and existing for the duration of
- * the program. */
 
+/*******************************************************************************
+ T Y P E S
+ ******************************************************************************/
 /* object put on the heap when a new subscription is registered. */
 typedef struct notify_subscription_s{
     /* subscriber's function that gets called back by notifier */
@@ -65,6 +62,10 @@ void notify_initializeList(notify_subscriberList*);
 /* called by notifier when the subscriber sends a subscription request. This
  * function adds the subscription to the list */
 bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb newSub);
+
+/* called by notifier when the subscriber sends an unsubscribe  request. This
+ * function removes the subscription from the list */
+bool notify_removeSubscriptionFromList(notify_subscriberList* list, notify_cb newSub);
 
 /* called by notifier when the data is received. This function calls the user's
  * callback function, returning the requested data. */
