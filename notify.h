@@ -29,32 +29,19 @@ extern "C" {
 #endif
 
 
-/****************************************************************************
- OBJECTS
- ****************************************************************************/
-
 /*******************************************************************************
  T Y P E S
  ******************************************************************************/
-/* object put on the heap when a new subscription is registered. */
-typedef struct notify_subscription_s{
-    /* subscriber's function that gets called back by notifier */
-    void (*cbf)(void*);
-    /* enable or disable a subscription */
-    bool enabled;
-    /* private variable - for internal use only */
-    struct notify_subscription_s* _nextNotify;
-} notify_subscription;
-
-/* object owned by notifier that contains all of the subscribers. */
-typedef notify_subscription* notify_subscriberList;
+/* list object owned by notifier that contains all of the subscribers. */
+typedef struct notify_subscription_s* notify_subscriberList;
 
 /* notify callback function type */
 typedef void(*notify_cb)(void*);
 
-/****************************************************************************
- NOTIFIER FUNCTIONS
- ****************************************************************************/
+
+/*******************************************************************************
+ P U B L I C   F U N C T I O N S
+ ******************************************************************************/
 
 /* called by notifier to intialize the list */
 void notify_initializeList(notify_subscriberList*);
@@ -77,4 +64,4 @@ void notify_notifySubscribers(notify_subscriberList*, void*);
 #endif
 
 
-#endif //SUBNOTIFY_H
+#endif //NOTIFY_H

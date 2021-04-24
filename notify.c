@@ -28,6 +28,19 @@
 
 
 /*******************************************************************************
+ T Y P E S
+ ******************************************************************************/
+/* object put on the heap when a new subscription is registered. */
+typedef struct notify_subscription_s{
+    /* subscriber's function that gets called back by notifier */
+    void (*cbf)(void*);
+    /* enable or disable a subscription */
+    bool enabled;
+    /* private variable - for internal use only */
+    struct notify_subscription_s* _nextNotify;
+}notify_subscription;
+
+/*******************************************************************************
  P U B L I C   F U N C T I O N S
  ******************************************************************************/
 
