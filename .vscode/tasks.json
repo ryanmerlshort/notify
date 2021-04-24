@@ -10,6 +10,8 @@
 				"${workspaceFolder}/examples/main.cpp",
 				"${workspaceFolder}/examples/dataSource.c",
 				"${workspaceFolder}/examples/user.c",
+				"${workspaceFolder}/examples/user2.c",
+				"${workspaceFolder}/examples/user3.c",
 				"${workspaceFolder}/notify.c",
 				"-o",
 				"${workspaceFolder}/examples/main",

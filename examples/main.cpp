@@ -1,4 +1,6 @@
 #include "user.h"
+#include "user2.h"
+#include "user3.h"
 #include "dataSource.h"
 
 int main()
@@ -8,12 +10,14 @@ int main()
     dataSource_module_initialize();
     /* this is where the user subscribes to the data source notifications */
     user_initialize_rtos();
+    user2_initialize_rtos();
+    user3_initialize_rtos();
 
 
     /* feed the data source data. this could be from a bus, interrupt, etc. */
     dataSource_feedData(5);
     dataSource_feedData(9);
-    dataSource_feedData(14040);
+    dataSource_feedData(14140);
 
 
 }

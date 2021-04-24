@@ -2,14 +2,14 @@
 #include <vector>
 #include <string>
 
-#include "user.h"
+#include "user2.h"
 #include "dataSource.h"
 
 /* function prototype */
 static void dataSource_cbf(uint32_t* data);
 
 /* initializer function that is called once the RTOS is started */
-void user_initialize_rtos(void)
+void user2_initialize_rtos(void)
 {
     dataSource_subscribe(dataSource_cbf);
 }
@@ -23,5 +23,5 @@ static void dataSource_cbf(uint32_t* data)
 {
     unsigned int myData = *(unsigned int*)data;
     /* in our example, we'll just print. */
-    std::cout << "data sent to user 1: " << myData << "\n\r";
+    std::cout << "data sent to user 2: " << myData << "\n\r";
 }

@@ -71,8 +71,14 @@ bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb sub_cbf
     /* else find the last subscriber in the list and set its address to newSub */
     else{
         subInList = *list;
-        while( (listIndex > MAX_LIST_ITEMS) ){
-            /* if this sub is the last element in the list, add new sub to it and exit */
+        while( (listIndex < MAX_LIST_ITEMS) ){
+            /* if this element in the list is empty, put data in here and exit */
+            if(subInList->cbf == NULL){
+                subInList->cbf = sub_cbf;
+                subInList->enabled = true;
+                break;
+            }
+            /* else if this sub is the last element in the list, add new sub to it and exit */
             if(subInList->_nextNotify == NULL){
                 void* newSubMalloc = malloc(sizeof(notify_subscription));
                 if(newSubMalloc == NULL){
@@ -103,13 +109,11 @@ void notify_notifySubscribers(notify_subscriberList* list, void* data)
     int listIndex=0;
     notify_subscription* subInList = *list;
 
-//    if(*list == NULL){
-//        return;
-//    }
-
     while( (listIndex < MAX_LIST_ITEMS) && (subInList != NULL) ){
         if(subInList->enabled){
-            subInList->cbf(data);
+            if(subInList->cbf){
+                subInList->cbf(data);
+            }
             subInList = subInList->_nextNotify;
         }
     }   
