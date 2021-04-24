@@ -16,13 +16,10 @@
  * github.com/ryanmerlshort/notify
  * 
  ***************************************************************************/
-
-
 #ifndef NOTIFY_H
 #define NOTIFY_H
 
 #include <stdbool.h>
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {

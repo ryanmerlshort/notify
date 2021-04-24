@@ -40,6 +40,7 @@ typedef struct notify_subscription_s{
     struct notify_subscription_s* _nextNotify;
 }notify_subscription;
 
+
 /*******************************************************************************
  P U B L I C   F U N C T I O N S
  ******************************************************************************/
