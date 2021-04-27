@@ -28,12 +28,6 @@
 
 
 /*******************************************************************************
- T Y P E S
- ******************************************************************************/
-
-
-
-/*******************************************************************************
  P U B L I C   F U N C T I O N S
  ******************************************************************************/
 
@@ -47,14 +41,14 @@ void notify_initializeSubscription(notify_subscription* sub, void (*cbf)(void*))
 }
 
 /* initialize list */
-void notify_initializeList(notify_subscriberList* list)//,
-//        void(*localMalloc)(size_t), 
-//        void(*localFree)(size_t))
+void notify_initializeList(notify_subscriberList* list,
+        mallocType localMalloc,
+        freeType localFree)
 {
 
     list->firstSub = NULL;
-//    list->localMalloc = localMalloc;
-//    list->localFree = localFree;
+    list->localMalloc = localMalloc;
+    list->localFree = localFree;
 }
 
 /* called by notifier when the subscriber sends a subscription request. This

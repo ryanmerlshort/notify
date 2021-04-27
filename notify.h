@@ -29,27 +29,29 @@ extern "C" {
 /*******************************************************************************
  T Y P E S
  ******************************************************************************/
+/* malloc and free function types */
+typedef void*(*mallocType)(size_t);
+typedef void*(*freeType)(size_t);
 
-struct notify_subscription_s;
+/* notify callback function type */
+typedef void(*notify_cb)(void*);
+
 /* object put on the heap when a new subscription is registered. */
 typedef struct notify_subscription_s{
     /* subscriber's function that gets called back by notifier */
-    void (*cbf)(void*);
-    /* enable or disable a subscription */
+    notify_cb cbf;
+    /* enable or disable a subscription (this has been deprecated, consider removing)*/
     bool enabled;
     /* next notify/subscription object */
     struct notify_subscription_s* _nextNotify;
 }notify_subscription;
 
-struct notifySubscriberList_s {
-    notify_subscription *firstSub;
-    void (*localMalloc)(size_t); 
-    void (*localFree)(size_t); 
-};
 /* list object owned by notifier that contains all of the subscribers. */
-typedef struct notifySubscriberList_s notify_subscriberList;
-/* notify callback function type */
-typedef void(*notify_cb)(void*);
+typedef struct notify_subscriberList_s{
+    notify_subscription *firstSub;
+    mallocType localMalloc; 
+    freeType localFree;
+}notify_subscriberList;
 
 
 /*******************************************************************************
@@ -57,9 +59,9 @@ typedef void(*notify_cb)(void*);
  ******************************************************************************/
 
 /* called by notifier to intialize the list */
-void notify_initializeList(notify_subscriberList*);//,
-//        void(*localMalloc)(size_t), 
-//        void(*localFree)(size_t) );
+void notify_initializeList(notify_subscriberList*,
+        mallocType, 
+        freeType );
 
 /* called by notifier when the subscriber sends a subscription request. This
  * function adds the subscription to the list */

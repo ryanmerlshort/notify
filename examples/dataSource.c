@@ -10,7 +10,7 @@ notify_subscriberList dataSourceSubscribers;
 /* initializer that gets called before the RTOS runs */
 void dataSource_module_initialize(void)
 {
-    notify_initializeList(&dataSourceSubscribers);//, malloc, free);
+    notify_initializeList(&dataSourceSubscribers, (mallocType)malloc, (freeType)free);
 }
 
 /* called when the subscriber wants to register for notifications */
