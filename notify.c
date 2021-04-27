@@ -61,7 +61,7 @@ bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb sub_cbf
 
     /* if the list is empty, add new sub to list */
     if(list->firstSub == NULL){
-        void* newSubMalloc = malloc(sizeof(notify_subscription));
+        void* newSubMalloc = list->localMalloc(sizeof(notify_subscription));
         if(newSubMalloc == NULL){
             return false;
         }
@@ -84,7 +84,7 @@ bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb sub_cbf
             }
             /* else if this sub is the last element in the list, add new sub to it and exit */
             else if(subInList->_nextNotify == NULL){
-                void* newSubMalloc = malloc(sizeof(notify_subscription));
+                void* newSubMalloc = list->localMalloc(sizeof(notify_subscription));
                 if(newSubMalloc == NULL){
                     return false;
                 }                
