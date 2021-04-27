@@ -30,15 +30,7 @@
 /*******************************************************************************
  T Y P E S
  ******************************************************************************/
-/* object put on the heap when a new subscription is registered. */
-typedef struct notify_subscription_s{
-    /* subscriber's function that gets called back by notifier */
-    void (*cbf)(void*);
-    /* enable or disable a subscription */
-    bool enabled;
-    /* private variable - for internal use only */
-    struct notify_subscription_s* _nextNotify;
-}notify_subscription;
+
 
 
 /*******************************************************************************
@@ -55,9 +47,14 @@ void notify_initializeSubscription(notify_subscription* sub, void (*cbf)(void*))
 }
 
 /* initialize list */
-void notify_initializeList(notify_subscriberList* list)
+void notify_initializeList(notify_subscriberList* list)//,
+//        void(*localMalloc)(size_t), 
+//        void(*localFree)(size_t))
 {
-    *list = NULL;
+
+    list->firstSub = NULL;
+//    list->localMalloc = localMalloc;
+//    list->localFree = localFree;
 }
 
 /* called by notifier when the subscriber sends a subscription request. This
@@ -69,7 +66,7 @@ bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb sub_cbf
     bool success = false;
 
     /* if the list is empty, add new sub to list */
-    if(*list == NULL){
+    if(list->firstSub == NULL){
         void* newSubMalloc = malloc(sizeof(notify_subscription));
         if(newSubMalloc == NULL){
             return false;
@@ -78,11 +75,11 @@ bool notify_addSubscriptionToList(notify_subscriberList* list, notify_cb sub_cbf
         subInList->_nextNotify = NULL;
         subInList->cbf = sub_cbf;
         subInList->enabled = true;
-        *list = (notify_subscription*)subInList;
+        list->firstSub = (notify_subscription*)subInList;
     }
     /* else find the last subscriber in the list and set its address to newSub */
     else{
-        subInList = *list;
+        subInList = list->firstSub;
         while( (listIndex < MAX_LIST_ITEMS) ){
             /* if this element in the list is empty, put data in here and exit */
             if(subInList->cbf == NULL){
@@ -124,12 +121,12 @@ bool notify_removeSubscriptionFromList(notify_subscriberList* list, notify_cb un
     bool success = false;
 
     /* if the list is empty, return */
-    if(*list == NULL){
+    if(list->firstSub == NULL){
         return false;
     }
 
-    /* find the cbf subscriber in the list and set nullify its package */
-    subInList = *list;
+    /* find the matching cbf subscriber in the list and set nullify its package */
+    subInList = list->firstSub;
     while( (listIndex < MAX_LIST_ITEMS) ){
         /* if this element in the list is empty, nullify its data and exit */
         if(subInList->cbf == unsub_cbf){
@@ -154,7 +151,7 @@ bool notify_removeSubscriptionFromList(notify_subscriberList* list, notify_cb un
 void notify_notifySubscribers(notify_subscriberList* list, void* data)
 {
     int listIndex=0;
-    notify_subscription* subInList = *list;
+    notify_subscription* subInList = list->firstSub;
 
     while( (listIndex < MAX_LIST_ITEMS) && (subInList != NULL) ){
         if(subInList->enabled){

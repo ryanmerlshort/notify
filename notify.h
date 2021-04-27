@@ -19,19 +19,35 @@
 #ifndef NOTIFY_H
 #define NOTIFY_H
 
-#include <stdbool.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdbool.h>
+#include <malloc.h>
 
 /*******************************************************************************
  T Y P E S
  ******************************************************************************/
-/* list object owned by notifier that contains all of the subscribers. */
-typedef struct notify_subscription_s* notify_subscriberList;
 
+struct notify_subscription_s;
+/* object put on the heap when a new subscription is registered. */
+typedef struct notify_subscription_s{
+    /* subscriber's function that gets called back by notifier */
+    void (*cbf)(void*);
+    /* enable or disable a subscription */
+    bool enabled;
+    /* next notify/subscription object */
+    struct notify_subscription_s* _nextNotify;
+}notify_subscription;
+
+struct notifySubscriberList_s {
+    notify_subscription *firstSub;
+    void (*localMalloc)(size_t); 
+    void (*localFree)(size_t); 
+};
+/* list object owned by notifier that contains all of the subscribers. */
+typedef struct notifySubscriberList_s notify_subscriberList;
 /* notify callback function type */
 typedef void(*notify_cb)(void*);
 
@@ -41,7 +57,9 @@ typedef void(*notify_cb)(void*);
  ******************************************************************************/
 
 /* called by notifier to intialize the list */
-void notify_initializeList(notify_subscriberList*);
+void notify_initializeList(notify_subscriberList*);//,
+//        void(*localMalloc)(size_t), 
+//        void(*localFree)(size_t) );
 
 /* called by notifier when the subscriber sends a subscription request. This
  * function adds the subscription to the list */
